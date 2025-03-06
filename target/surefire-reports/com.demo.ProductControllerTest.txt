@@ -1,0 +1,8 @@
+-------------------------------------------------------------------------------
+Test set: com.demo.ProductControllerTest
+-------------------------------------------------------------------------------
+Tests run: 2, Failures: 1, Errors: 0, Skipped: 0, Time elapsed: 3.112 s <<< FAILURE! - in com.demo.ProductControllerTest
+testInsertProduct  Time elapsed: 0.033 s  <<< FAILURE!
+java.lang.AssertionError: Range for response status value 405 expected:<REDIRECTION> but was:<CLIENT_ERROR>
+	at com.demo.ProductControllerTest.testInsertProduct(ProductControllerTest.java:73)
+

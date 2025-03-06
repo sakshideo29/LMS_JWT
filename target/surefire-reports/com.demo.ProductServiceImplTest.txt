@@ -1,0 +1,24 @@
+-------------------------------------------------------------------------------
+Test set: com.demo.ProductServiceImplTest
+-------------------------------------------------------------------------------
+Tests run: 5, Failures: 1, Errors: 0, Skipped: 0, Time elapsed: 0.136 s <<< FAILURE! - in com.demo.ProductServiceImplTest
+testUpdateProduct  Time elapsed: 0.02 s  <<< FAILURE!
+org.mockito.exceptions.verification.opentest4j.ArgumentsAreDifferent: 
+
+Argument(s) are different! Wanted:
+productDao.save(
+    Product [pid=1, pname=UpdatedProduct, qty=15, price=150.0]
+);
+-> at com.demo.ProductServiceImplTest.testUpdateProduct(ProductServiceImplTest.java:60)
+Actual invocations have different arguments:
+productDao.findById(
+    1
+);
+-> at com.demo.service.ProductServiceImpl.updateById(ProductServiceImpl.java:38)
+productDao.save(
+    Product [pid=1, pname=UpdatedProduct, qty=15, price=150.0]
+);
+-> at com.demo.service.ProductServiceImpl.updateById(ProductServiceImpl.java:44)
+
+	at com.demo.ProductServiceImplTest.testUpdateProduct(ProductServiceImplTest.java:60)
+
