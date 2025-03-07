@@ -4,9 +4,18 @@ import com.xoriant.learningmanagementsystem.course.entity.Course;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
-import java.util.Optional;
 
+/**
+ * Repository interface for managing Course entities.
+ * This interface extends JpaRepository, providing CRUD operations for Course.
+ */
 public interface CourseRepository extends JpaRepository<Course, Long> {
-    Optional<Course> findById(Long id);
+
+    /**
+     * Finds all courses associated with a given instructor.
+     *
+     * @param instructorId The ID of the instructor.
+     * @return A list of courses associated with the instructor.
+     */
     List<Course> findByInstructorId(Long instructorId);
 }

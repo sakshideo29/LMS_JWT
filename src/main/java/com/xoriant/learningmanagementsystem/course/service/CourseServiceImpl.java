@@ -3,7 +3,6 @@ package com.xoriant.learningmanagementsystem.course.service;
 import com.xoriant.learningmanagementsystem.course.dto.CourseRequestDto;
 import com.xoriant.learningmanagementsystem.course.entity.Course;
 import com.xoriant.learningmanagementsystem.course.repository.CourseRepository;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -13,22 +12,27 @@ import java.util.List;
 public class CourseServiceImpl implements CourseService {
 
     private final CourseRepository courseRepository;
-    private final StudentRepository studentRepository;
 
-    // Constructor injection
     @Autowired
-    public CourseServiceImpl(CourseRepository courseRepository, StudentRepository studentRepository) {
+    public CourseServiceImpl(CourseRepository courseRepository) {
         this.courseRepository = courseRepository;
-        this.studentRepository = studentRepository;
     }
 
     @Override
     public Course createCourse(CourseRequestDto courseRequest) {
+        if (courseRequest == null || courseRequest.getName() == null || courseRequest.getName().isEmpty()) {
+            throw new IllegalArgumentException("Invalid course data: " + courseRequest);
+        }
         Course course = new Course();
         course.setName(courseRequest.getName());
         course.setDescription(courseRequest.getDescription());
-        course.setInstructorId(courseRequest.getInstructorId());
         return courseRepository.save(course);
+    }
+
+    @Override
+    public Course getCourseById(Long id) {
+        return courseRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Course not found with ID: " + id));
     }
 
     @Override
@@ -37,16 +41,10 @@ public class CourseServiceImpl implements CourseService {
     }
 
     @Override
-    public Course getCourseById(Long id) {
-        return courseRepository.findById(id).orElseThrow(() -> new RuntimeException("Course not found"));
-    }
-
-    @Override
     public Course updateCourse(Long id, CourseRequestDto courseRequest) {
         Course course = getCourseById(id);
         course.setName(courseRequest.getName());
         course.setDescription(courseRequest.getDescription());
-        course.setInstructorId(courseRequest.getInstructorId());
         return courseRepository.save(course);
     }
 
@@ -57,6 +55,6 @@ public class CourseServiceImpl implements CourseService {
 
     @Override
     public void enrollStudent(Long courseId, Long studentId) {
-        // Logic to enroll student into a course
+        // Enroll logic goes here
     }
 }

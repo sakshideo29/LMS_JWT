@@ -3,6 +3,8 @@ package com.xoriant.learningmanagementsystem.user.controller;
 import com.xoriant.learningmanagementsystem.user.entity.Role;
 import com.xoriant.learningmanagementsystem.user.entity.User;
 import com.xoriant.learningmanagementsystem.user.service.UserService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -13,6 +15,7 @@ import java.util.List;
 public class UserController {
 
     private final UserService userService;
+    private static final Logger logger = LoggerFactory.getLogger(UserController.class);
 
     // Constructor injection to avoid field injection
     public UserController(UserService userService) {
@@ -28,7 +31,7 @@ public class UserController {
     @PostMapping("/signup")
     public ResponseEntity<List<User>> createUsers(@RequestBody List<User> users) {
         if (users == null || users.isEmpty()) {
-            // PMD suggestion: validate input and return appropriate response
+            logger.warn("Attempt to create users with empty list.");
             return ResponseEntity.badRequest().body(null);
         }
         return ResponseEntity.ok(userService.createUsers(users));
@@ -44,7 +47,8 @@ public class UserController {
     @PutMapping("/{id}")
     public ResponseEntity<User> updateUser(@PathVariable Long id, @RequestBody User userDetails) {
         if (id == null || userDetails == null) {
-            return ResponseEntity.badRequest().body(null); // PMD suggestion: null checks for better validation
+            logger.warn("Attempt to update user with invalid ID or userDetails: id={} userDetails={}", id, userDetails);
+            return ResponseEntity.badRequest().body(null); // Improved validation
         }
         return ResponseEntity.ok(userService.updateUser(id, userDetails));
     }
@@ -58,7 +62,8 @@ public class UserController {
     @GetMapping("/{id}")
     public ResponseEntity<User> getUserById(@PathVariable Long id) {
         if (id == null) {
-            return ResponseEntity.badRequest().body(null); // PMD suggestion: handle edge cases
+            logger.warn("Attempt to fetch user with invalid ID: {}", id);
+            return ResponseEntity.badRequest().body(null); // Improved validation
         }
         return ResponseEntity.ok(userService.getUserById(id));
     }
@@ -93,8 +98,8 @@ public class UserController {
             }
             return ResponseEntity.ok(users);
         } catch (IllegalArgumentException ex) {
-            // PMD suggestion: detailed logging or proper exception handling for invalid role
-            return ResponseEntity.badRequest().body(null);
+            logger.error("Invalid role provided: {}", role, ex);
+            return ResponseEntity.badRequest().body(null); // PMD suggestion: detailed logging or proper exception handling for invalid role
         }
     }
 
@@ -107,6 +112,7 @@ public class UserController {
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteUser(@PathVariable Long id) {
         if (id == null) {
+            logger.warn("Attempt to delete user with invalid ID: {}", id);
             return ResponseEntity.badRequest().build(); // PMD suggestion: handle invalid inputs
         }
         userService.deleteUser(id);
